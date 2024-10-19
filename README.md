@@ -90,22 +90,16 @@ This project leverages the following technologies:
 
 ## Project Structure
 ```
+Student-Performance-Analysis/
 ├── data/
-│   ├── raw/                  # Raw data as downloaded from Kaggle
-│   ├── processed/            # Cleaned and processed data for analysis
-├── notebooks/
-│   ├── 01_general_trends_descriptive_analysis.Rmd
-│   ├── 02_correlation_relationships.Rmd
-│   ├── ...                   # Notebooks for each analysis category
-├── scripts/
-│   ├── data_preprocessing.R   # Scripts for data cleaning and preparation
-│   ├── visualization.R        # Scripts for generating plots and graphs
+│   ├── raw/                  # Raw data downloaded from Kaggle
+│   ├── processed/            # Cleaned data for analysis
+├── analysis/
+│   ├── analysis_report.Rmd    # Main R Markdown file for analysis
 ├── results/
-│   ├── general_trends/        # Output plots and summaries from the analyses
-│   ├── ...                    # Results for each analysis category
-├── reports/
-│   ├── final_report.pdf       # Summary of findings
-└── README.md                  # Project overview and instructions
+│   ├── plots/                # Output plots from your analysis
+├── README.md                  # Project overview and dataset description
+
 ```
 
 ## Setup
