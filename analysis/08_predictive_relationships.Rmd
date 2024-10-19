@@ -1,0 +1,38 @@
+---
+title: "Predictive Relationships"
+author: "&copy; Hector Mathonsi"
+date: 2024-10-19
+output:
+    html_notebook:
+        theme: flatly
+        toc: true
+        toc_float: true
+---
+
+-----
+
+# Abstract
+
+This report explores the relationships between various factors influencing student performance, using exploratory data analysis (EDA) to identify key trends and correlations. The analysis focuses on variables such as study habits, access to resources, parental involvement, and environmental factors, and how they impact final exam scores. Insights gained from the data will inform recommendations aimed at improving academic outcomes for students.
+
+# Data Source
+
+The dataset was sourced from Kaggle under the CC0 1.0 universal "No Copyright" license. We are free to copy, modify, distribute and perform the work, even for commercial purposes, all without asking permission. Learn more about this license here [here](https://creativecommons.org/publicdomain/zero/1.0/).
+
+URL for data in Kaggle: [Student Performance Factors Dataset](https://www.kaggle.com/datasets/lainguyn123/student-performance-factors)
+
+# Import and View Data
+
+```{r}
+student_data <- read.csv('../data/StudentPerformanceFactors.csv', header = TRUE)
+student_data    # Display the dataset
+```
+
+### Summary Statistics
+
+```{r}
+summary(student_data)   # Summary statistics for all variables
+head(student_data)      # Display the first few rows of the dataset
+str(student_data)       # Structure of the dataset
+sum(is.na(student_data))    # Check for missing values
+```
