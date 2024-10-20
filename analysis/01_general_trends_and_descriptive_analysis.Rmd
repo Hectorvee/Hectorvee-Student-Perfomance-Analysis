@@ -37,6 +37,92 @@ str(student_data)       # Structure of the dataset
 sum(is.na(student_data))    # Check for missing values
 ```
 
-# Analysis
+# Distribution of Final Exam Scores
 
-### What is the distribution of final exam scores among students?
+## Distribution of Final Exam Scores(Without Considering Other Factors)
+Here we will explore the distribution of final exam scores among students with without considering other factors.
+To find our the distribution of final exam scores, we first need to sample the data and plot a histogram.
+```{r}
+# Sample the data
+set.seed(123)
+exam_score_sample <- student_data$Exam_Score[sample(nrow(student_data), 100)]
+exam_score_sample
+
+# Plot histogram
+hist(exam_score_sample, main = "Distribution of Final Exam Scores", xlab = "Final Exam Score", col = "skyblue", border = "black")
+```
+
+From the histogram, we can see that the distribution of final exam scores is approximately normal. We now plot a boxplot to visualize the spread of scores and identify any outliers.
+```{r}
+# Boxplot of final exam scores
+boxplot(exam_score_sample, main = "Boxplot of Final Exam Scores", col = "skyblue", border = "black")
+```
+
+The boxplot shows that the distribution of final exam scores is centered around the median, with a few outliers on the lower end of the scale. Now we use numerical methods to confirm the normality of the distribution.
+```{r}
+# Shapiro-Wilk test for normality
+shapiro.test(exam_score_sample)
+```
+
+The Shapiro-Wilk test confirms that the distribution of final exam scores is approximately normal, with a p-value greater than 0.05.
+
+## Distribution of Final Exam Scores (Parental_Involvement Category)
+
+Next, we explore the distribution of final exam scores based on parental involvement levels. We will create a boxplot to compare the scores of students with different levels of parental involvement.
+```{r}
+# Sample the data
+high_parental_involvement <- student_data$Exam_Score[student_data$Parental_Involvement == "High"][sample(sum(student_data$Parental_Involvement == "High"), 100)]
+medium_parental_involvement <- student_data$Exam_Score[student_data$Parental_Involvement == "Medium"][sample(sum(student_data$Parental_Involvement == "Medium"), 100)]
+low_parental_involvement <- student_data$Exam_Score[student_data$Parental_Involvement == "Low"][sample(sum(student_data$Parental_Involvement == "Low"), 100)]
+
+# Histogram of final exam scores by parental involvement
+par(mfrow = c(1, 3))
+hist(high_parental_involvement, main = "High Parental Involvement", xlab = "Final Exam Score", col = "skyblue", border = "black")
+hist(medium_parental_involvement, main = "Medium Parental Involvement", xlab = "Final Exam Score", col = "skyblue", border = "black")
+hist(low_parental_involvement, main = "Low Parental Involvement", xlab = "Final Exam Score", col = "skyblue", border = "black")
+```
+
+The three histograms show the distribution of final exam scores for students with high, medium, and low levels of parental involvement. We can see that the distribution of the scores seems to be similar across all three categories. They seem to follow a normal distribution, with a slight skew towards higher scores for students with high parental involvement.
+We now use numerical methods to confirm the normality of the distributions.
+```{r}
+# Shapiro-Wilk test for normality
+shapiro.test(high_parental_involvement)
+shapiro.test(medium_parental_involvement)
+shapiro.test(low_parental_involvement)
+```
+
+The Shapiro-Wilk test confirms that the distributions of final exam scores for students with high and medium levels of parental involvement are approximately normal, with p-values greater than 0.05. However, the distribution for students with low parental involvement is slightly skewed, with a p-value less than 0.05.
+
+We now investigate the distribution of final exam scores for students with low parental involvement further. We will now plot a density plot to visualize the distribution more clearly.
+```{r}
+# Density plot of final exam scores for students with low parental involvement
+plot(density(low_parental_involvement), main = "Density Plot of Final Exam Scores for Low Parental Involvement", xlab = "Final Exam Score", col = "skyblue")
+```
+
+The density plot shows that the distribution of final exam is slightly skewed to the left for students with low parental involvement. We will now create a QQ plot to compare the distribution of scores to a normal distribution.
+
+```{r}
+# QQ plot of final exam scores for students with low parental involvement
+qqnorm(low_parental_involvement, main = "QQ Plot of Final Exam Scores for Low Parental Involvement", col = "skyblue")
+qqline(low_parental_involvement, col = "red")
+```
+
+The QQ plot confirms that the distribution of final exam scores for students with low parental involvement is slightly skewed to the left, deviating from a normal distribution.
+
+## Distribution of Final Exam Scores (Access_to_Resources Category)
+
+Next, we explore the distribution of final exam scores based on access to resources. We will create a boxplot to compare the scores of students with different levels of access to resources.
+```{r}
+# Sample the data
+high_access_to_resources <- student_data$Exam_Score[student_data$Access_to_Resources == "High"][sample(sum(student_data$Access_to_Resources == "High"), 100)]
+medium_access_to_resources <- student_data$Exam_Score[student_data$Access_to_Resources == "Medium"][sample(sum(student_data$Access_to_Resources == "Medium"), 100)]
+low_access_to_resources <- student_data$Exam_Score[student_data$Access_to_Resources == "Low"][sample(sum(student_data$Access_to_Resources == "Low"), 100)]
+
+# Histogram of final exam scores by access to resources
+par(mfrow = c(1, 3))
+hist(high_access_to_resources, main = "High Access to Resources", xlab = "Final Exam Score", col = "skyblue", border = "black")
+hist(medium_access_to_resources, main = "Medium Access to Resources", xlab = "Final Exam Score", col = "skyblue", border = "black")
+hist(low_access_to_resources, main = "Low Access to Resources", xlab = "Final Exam Score", col = "skyblue", border = "black")
+```
+
+
