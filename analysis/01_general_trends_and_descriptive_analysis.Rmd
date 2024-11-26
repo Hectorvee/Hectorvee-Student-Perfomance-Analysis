@@ -5,6 +5,7 @@ date: 2024-10-19
 output:
     html_notebook:
         theme: flatly
+        highlight: tango
         toc: true
         toc_float: true
 ---
@@ -31,6 +32,7 @@ student_data    # Display the dataset
 ### Summary Statistics
 
 ```{r}
+# Summary statistics for all variables
 summary(student_data)   # Summary statistics for all variables
 head(student_data)      # Display the first few rows of the dataset
 str(student_data)       # Structure of the dataset
@@ -123,6 +125,141 @@ par(mfrow = c(1, 3))
 hist(high_access_to_resources, main = "High Access to Resources", xlab = "Final Exam Score", col = "skyblue", border = "black")
 hist(medium_access_to_resources, main = "Medium Access to Resources", xlab = "Final Exam Score", col = "skyblue", border = "black")
 hist(low_access_to_resources, main = "Low Access to Resources", xlab = "Final Exam Score", col = "skyblue", border = "black")
+
+plot(density(low_access_to_resources), main = "Low Access to Resources", xlab = "Final Exam Score", col = "skyblue")
+plot(density(medium_access_to_resources), main = "Medium Access to Resources", xlab = "Final Exam Score", col = "skyblue")
+plot(density(high_access_to_resources), main = "High Access to Resources", xlab = "Final Exam Score", col = "skyblue")
 ```
+
+The histograms and density plots show the distribution of final exam scores for students with high, medium, and low levels of access to resources. The distributions seem to be similar across all three categories, with a slight skew towards higher scores for students with high access to resources. We will now use numerical methods to confirm the normality of the distributions.
+
+```{r}
+# Shapiro-Wilk test for normality
+shapiro.test(high_access_to_resources)
+shapiro.test(medium_access_to_resources)
+shapiro.test(low_access_to_resources)
+```
+
+The Shapiro-Wilk test shows that the distribution of all three categories of access to resources is not normal, with p-values less than 0.05. This indicates that the distribution of final exam scores is skewed for students with different levels of access to resources.
+
+## Distribution of Final Exam Scores (Extracurricular_Activities Category)
+
+Next, we explore the distribution of final exam scores based on participation in extracurricular activities. We will create a boxplot to compare the scores of students who participate in extracurricular activities and those who do not.
+```{r}
+# Sample the data
+participate_extracurricular <- student_data$Exam_Score[student_data$Extracurricular_Activities == "Yes"][sample(sum(student_data$Extracurricular_Activities == "Yes"), 100)]
+do_not_participate_extracurricular <- student_data$Exam_Score[student_data$Extracurricular_Activities == "No"][sample(sum(student_data$Extracurricular_Activities == "No"), 100)]
+
+# Boxplot of final exam scores by extracurricular activities
+boxplot(student_data$Exam_Score ~ student_data$Extracurricular_Activities, main = "Final Exam Scores by Extracurricular Activities", xlab = "Extracurricular Activities", ylab = "Final Exam Score", col = "skyblue", border = "black")
+```
+
+The boxplot shows that students who participate in extracurricular activities tend to have higher final exam scores compared to those who do not. Now we will visualize the distribution of scores for both groups using histograms.
+```{r}
+# Histogram of final exam scores by extracurricular activities
+par(mfrow = c(1, 2))
+hist(participate_extracurricular, main = "Extracurricular Activities", xlab = "Final Exam Score", col = "skyblue", border = "black")
+hist(do_not_participate_extracurricular, main = "No Extracurricular Activities", xlab = "Final Exam Score", col = "skyblue", border = "black")
+```
+
+Both histograms show right skewed distributions, with students who participate in extracurricular activities having higher final exam scores. We will now use numerical methods to confirm the normality of the distributions with the following hypothesis test.
+
+- Null Hypothesis ($H_0$): The distribution of final exam scores for students who participate in extracurricular activities is normal.
+- Alternative Hypothesis ($H_1$): The distribution of final exam scores for students who participate in extracurricular activities is not normal.
+
+```{r}
+# Shapiro-Wilk test for normality
+shapiro.test(participate_extracurricular)
+```
+
+The Shapiro-Wilk test confirms that the distribution of final exam scores for students who participate in extracurricular activities is not normal, with a p-value less than 0.05. Thus, we reject the null hypothesis.
+
+## Distribution of Final Exam Scores (Motivation_Level Category)
+
+Next we explore the distribution of final exam scores based on motivation levels. We will create a histogram to compare the scores of students with different motivation levels.
+```{r}
+# Smaple Data
+high_motivation <- student_data$Exam_Score[student_data$Motivation_Level == "High"][sample(sum(student_data$Motivation_Level == "High"), 100)]
+medium_motivation <- student_data$Exam_Score[student_data$Motivation_Level == "High"][sample(sum(student_data$Motivation_Level == "Medium"), 100)]
+low_motivation <- student_data$Exam_Score[student_data$Motivation_Level == "High"][sample(sum(student_data$Motivation_Level == "Low"), 100)]
+
+# Histogram of final exam scores by motivation level
+par(mfrow = c(1, 3))
+hist(high_motivation, main = "High Motivation Level", xlab = "Final Exam Score", col = "skyblue", border = "black")
+hist(medium_motivation, main = "Medium Motivation Level", xlab = "Final Exam Score", col = "skyblue", border = "black")
+hist(low_motivation, main = "Low Motivation Level", xlab = "Final Exam Score", col = "skyblue", border = "black")
+```
+
+The histograms for High and medium motivation levels show a normal distribution of final exam scores, while the low motivation level histogram shows a right-skewed distribution. We will now use numerical methods to confirm the normality of the distributions.
+
+```{r}
+# Shapiro-Wilk test for normality
+shapiro.test(high_motivation)
+shapiro.test(medium_motivation)
+shapiro.test(low_motivation)
+```
+
+The Shapiro-Wilk test confirms that the distributions of final exam scores for students with high and medium motivation levels are approximately normal, with p-values greater than 0.05. However, the distribution for students with low motivation levels is slightly skewed, with a p-value less than 0.05.
+
+## Summary of Distribution Analysis
+
+In summary, the distribution of final exam scores is approximately normal when considering all students. However, when examining the scores based on other factors such as parental involvement, access to resources, extracurricular activities, and motivation levels, the distributions vary. Students with high parental involvement and high access to resources tend to have higher final exam scores, while students who participate in extracurricular activities also perform better. Motivation levels also play a role in student performance, with students who are highly motivated achieving higher scores.
+
+# Average number of hours students study per week
+
+## Average Number of Hours Students Study per Week (Without Considering Other Factors)
+
+Next, we explore the average number of hours students study per week without considering other factors.
+```{r}
+# Summary statistics for study hours
+summary(student_data$Hours_Studied)
+```
+
+The summary statistics show that the average number of hours students study per week is approximately 19.98 hours. We will now visualize the distribution of study hours using a histogram.
+```{r}
+# Histogram of study hours
+hist(student_data$Hours_Studied, main = "Distribution of Study Hours", xlab = "Study Hours", col = "skyblue", border = "black")
+```
+
+## Average Number of Hours Students Study per Week (Parental_Involvement Category)
+
+Next, we will explore the average number of hours students study per week based on parental involvement levels.
+```{r}
+# Summary statistics for study hours by parental involvement
+summary(student_data$Hours_Studied[student_data$Parental_Involvement == "High"])
+summary(student_data$Hours_Studied[student_data$Parental_Involvement == "Medium"])
+summary(student_data$Hours_Studied[student_data$Parental_Involvement == "Low"])
+```
+
+The summary statistics of the average number of hours students study per week based on parental involvement levels do not show significant differences. We will now use ANOVA to test for differences in study hours based on parental involvement levels. But first, we need to check the assumptions of ANOVA.
+```{r}
+# Sample the data
+high_parental_involvement <- student_data$Hours_Studied[student_data$Parental_Involvement == "High"][sample(sum(student_data$Parental_Involvement == "High"), 100)]
+medium_parental_involvement <- student_data$Hours_Studied[student_data$Parental_Involvement == "Medium"][sample(sum(student_data$Parental_Involvement == "Medium"), 100)]
+low_parental_involvement <- student_data$Hours_Studied[student_data$Parental_Involvement == "Low"][sample(sum(student_data$Parental_Involvement == "Low"), 100)]
+
+# Histogram of study hours by parental involvement
+par(mfrow = c(1, 3))
+hist(high_parental_involvement, main = "High Parental Involvement", xlab = "Study Hours", col = "skyblue", border = "black")
+hist(medium_parental_involvement, main = "Medium Parental Involvement", xlab = "Study Hours", col = "skyblue", border = "black")
+hist(low_parental_involvement, main = "Low Parental Involvement", xlab = "Study Hours", col = "skyblue", border = "black")
+
+
+# Check assumptions of ANOVA
+shapiro.test(high_parental_involvement)
+shapiro.test(medium_parental_involvement)
+shapiro.test(low_parental_involvement)
+```
+
+Both the histograms and the Shapiro-Wilk test show that the distribution of study hours is approximately normal for all students. We will now use ANOVA to test for differences in study hours based on parental involvement levels.
+```{r}
+# ANOVA test for study hours by parental involvement
+anova_parental_involvement <- aov(Hours_Studied ~ Parental_Involvement, data = student_data)
+summary(anova_parental_involvement)
+```
+
+The ANOVA test shows that there is no significant difference in the average number of hours students study per week based on parental involvement levels, with a p-value greater than 0.05. This indicates that parental involvement does not have a significant impact on the number of hours students study per week.
+
+
 
 
