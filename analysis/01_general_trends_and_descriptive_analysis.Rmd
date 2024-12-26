@@ -39,9 +39,83 @@ str(student_data)       # Structure of the dataset
 sum(is.na(student_data))    # Check for missing values
 ```
 
+### Data Cleaning
+
+We now check whether the dataset contains any missing values and remove them if necessary.
+
+```{r}
+# Check missing values in each column
+colSums(is.na(student_data))
+```
+
+We can see that there are no missing values in the dataset.
+
+We now check the unique values in each categorical column to identify any inconsistencies.
+
+```{r}
+# Unique values in each categorical column
+lapply(student_data[, sapply(student_data, is.character)], unique)
+```
+
+From the results above we can Teacher_Quality, Parental_Education_Level and Distance_from_Home have missing values. We will now investigate further to see exactly what these missing values are.
+
+```{r}
+# Check for missing values in Teacher_Quality
+teacher_quality_missing <- student_data[student_data$Teacher_Quality == "",]
+teacher_quality_missing
+nrow(teacher_quality_missing)
+```
+
+We can see that only 78 rows have missing values in the Teacher_Quality column. We will now investigate the Parental_Education_Level column.
+
+```{r}
+# Check for missing values in Parental_Education_Level
+parental_education_level_missing <- student_data[student_data$Parental_Education_Level == "",]
+parental_education_level_missing
+nrow(parental_education_level_missing)
+```
+
+We can see that 90 rows have missing values in the Parental_Education_Level column. We will now investigate the Distance_from_Home column.
+
+```{r}
+# Check for missing values in Distance_from_Home
+distance_from_home_missing <- student_data[student_data$Distance_from_Home == "",]
+distance_from_home_missing
+nrow(distance_from_home_missing)
+```
+
+We can see that 67 rows have missing values in the Distance_from_Home column. All the missing values combined make up less than 10% of the dataset. We will remove these rows from the dataset.
+
+```{r}
+# Remove rows with missing values
+student_data <- subset(student_data, Teacher_Quality != "" & Parental_Education_Level != "" & Distance_from_Home != "")
+
+# Check for missing values
+lapply(student_data[, sapply(student_data, is.character)], unique)
+```
+
+We now investigate the dependent variable, Final_Exam_Score, to identify any outliers.
+
+```{r}
+# Outliers in Final_Exam_Score
+outliers_in_exam_score <- student_data[student_data$Exam_Score > 100,]
+outliers_in_exam_score
+nrow(outliers_in_exam_score)
+```
+
+We can see that only 1 student got exam score of 101 which is an outlier. We will remove this row from the dataset.
+
+```{r}
+# Remove outliers
+student_data <- subset(student_data, Exam_Score <= 100)
+```
+
+Now that the data has been cleaned, we can proceed with the exploratory data analysis.
+
+
 # Distribution of Final Exam Scores
 
-## Distribution of Final Exam Scores(Without Considering Other Factors)
+## Distribution of Final Exam Scores (Without Considering Other Factors)
 Here we will explore the distribution of final exam scores among students with without considering other factors.
 To find our the distribution of final exam scores, we first need to sample the data and plot a histogram.
 ```{r}
@@ -66,7 +140,7 @@ The boxplot shows that the distribution of final exam scores is centered around 
 shapiro.test(exam_score_sample)
 ```
 
-The Shapiro-Wilk test confirms that the distribution of final exam scores is approximately normal, with a p-value greater than 0.05.
+The Shapiro-Wilk test confirms that the distribution of final exam scores is not normal, with a p-value less than 0.05.
 
 ## Distribution of Final Exam Scores (Parental_Involvement Category)
 
@@ -778,4 +852,123 @@ summary(sample_attendance)
 # Histogram of attendance rates
 hist(sample_attendance, main = "Distribution of Attendance Rates", xlab = "Attendance Rate", col = "skyblue", border = "black")
 ```
+
+From the histogram we can see that the distribution of attendance rates is approximately uniform, ranging from approximately **`60%`** to **`100%`**. We can see one slightly higher peak around **`70%`** to **`80%`**. From this we can see that attendance rates are evenly distributed across students. The average attendance rate is approximately **`79.75%`**, which is relatively high. We now investigate the factors that may influence attendance rates.
+
+## Attendance Rates by Parental Involvement
+
+We will now explore the attendance rates based on parental involvement levels.
+
+```{r}
+# Summary statistics for attendance rates by parental involvement
+summary(student_data$Attendance[student_data$Parental_Involvement == "High"])
+summary(student_data$Attendance[student_data$Parental_Involvement == "Medium"])
+summary(student_data$Attendance[student_data$Parental_Involvement == "Low"])
+```
+
+The summary statistics of the attendance rates based on parental involvement levels show no significant differences. We will now use ANOVA to test for differences in attendance rates based on parental involvement levels. But first, we need to check the assumptions of ANOVA.
+
+```{r}
+# Sample the data
+high_parental_involvement_attendance <- student_data$Attendance[student_data$Parental_Involvement == "High"][sample(sum(student_data$Parental_Involvement == "High"), 100)]
+medium_parental_involvement_attendance <- student_data$Attendance[student_data$Parental_Involvement == "Medium"][sample(sum(student_data$Parental_Involvement == "Medium"), 100)]
+low_parental_involvement_attendance <- student_data$Attendance[student_data$Parental_Involvement == "Low"][sample(sum(student_data$Parental_Involvement == "Low"), 100)]
+
+# Histogram of attendance rates by parental involvement
+par(mfrow = c(1, 3))
+hist(high_parental_involvement_attendance, main = "High Parental Involvement", xlab = "Attendance Rate", col = "skyblue", border = "black")
+hist(medium_parental_involvement_attendance, main = "Medium Parental Involvement", xlab = "Attendance Rate", col = "skyblue", border = "black")
+hist(low_parental_involvement_attendance, main = "Low Parental Involvement", xlab = "Attendance Rate", col = "skyblue", border = "black")
+
+# Check assumptions of ANOVA
+shapiro.test(high_parental_involvement_attendance)
+shapiro.test(medium_parental_involvement_attendance)
+shapiro.test(low_parental_involvement_attendance)
+```
+
+All three histograms and the Shapiro-Wilk test show that the distribution of attendance rates is not normal for all students. We will now use Kruksal-Wallis test to test for differences in attendance rates based on parental involvement levels.
+
+```{r}
+# Kruksal-Wallis test
+kruskal.test(Attendance ~ Parental_Involvement, data = student_data)
+```
+
+The Kruskal-Wallis test shows that there is no significant difference in the average attendance rates based on parental involvement levels, with a p-value greater than 0.05. This indicates that parental involvement does not have a significant impact on attendance rates.
+
+## Attendance Rates by Access to Resources
+
+Next, we explore the attendance rates based on access to resources.
+
+```{r}
+# Summary statistics for attendance rates by access to resources
+summary(student_data$Attendance[student_data$Access_to_Resources == "High"])
+summary(student_data$Attendance[student_data$Access_to_Resources == "Medium"])
+summary(student_data$Attendance[student_data$Access_to_Resources == "Low"])
+```
+
+The summary statistics of the attendance rates based on access to resources show no significant differences. We will now use ANOVA to test for differences in attendance rates based on access to resources. But first, we need to check the assumptions of ANOVA.
+
+```{r}
+# Sample the data
+high_access_to_resources_attendance <- student_data$Attendance[student_data$Access_to_Resources == "High"][sample(sum(student_data$Access_to_Resources == "High"), 100)]
+medium_access_to_resources_attendance <- student_data$Attendance[student_data$Access_to_Resources == "Medium"][sample(sum(student_data$Access_to_Resources == "Medium"), 100)]
+low_access_to_resources_attendance <- student_data$Attendance[student_data$Access_to_Resources == "Low"][sample(sum(student_data$Access_to_Resources == "Low"), 100)]
+
+# Histogram of attendance rates by access to resources
+par(mfrow = c(1, 3))
+hist(high_access_to_resources_attendance, main = "High Access to Resources", xlab = "Attendance Rate", col = "skyblue", border = "black")
+hist(medium_access_to_resources_attendance, main = "Medium Access to Resources", xlab = "Attendance Rate", col = "skyblue", border = "black")
+hist(low_access_to_resources_attendance, main = "Low Access to Resources", xlab = "Attendance Rate", col = "skyblue", border = "black")
+
+# Check assumptions of ANOVA
+shapiro.test(high_access_to_resources_attendance)
+shapiro.test(medium_access_to_resources_attendance)
+shapiro.test(low_access_to_resources_attendance)
+```
+
+All three histograms and the Shapiro-Wilk test show that the distribution of attendance rates is not normal for all students. We will now use Kruksal-Wallis test to test for differences in attendance rates based on access to resources.
+
+```{r}
+# Kruksal-Wallis test
+kruskal.test(Attendance ~ Access_to_Resources, data = student_data)
+```
+
+The Kruskal-Wallis test shows that there is no significant difference in the average attendance rates based on access to resources, with a p-value greater than 0.05. This indicates that access to resources does not have a significant impact on attendance rates.
+
+## Attendance Rates by Extracurricular Activities
+
+Next, we explore the attendance rates based on participation in extracurricular activities.
+
+```{r}
+# Summary statistics for attendance rates by extracurricular activities
+summary(student_data$Attendance[student_data$Extracurricular_Activities == "Yes"])
+summary(student_data$Attendance[student_data$Extracurricular_Activities == "No"])
+```
+
+The summary statistics of the attendance rates based on participation in extracurricular activities show no significant differences. We will now use ANOVA to test for differences in attendance rates based on participation in extracurricular activities. But first, we need to check the assumptions of ANOVA.
+
+```{r}
+# Sample the data
+participate_extracurricular_attendance <- student_data$Attendance[student_data$Extracurricular_Activities == "Yes"][sample(sum(student_data$Extracurricular_Activities == "Yes"), 100)]
+do_not_participate_extracurricular_attendance <- student_data$Attendance[student_data$Extracurricular_Activities == "No"][sample(sum(student_data$Extracurricular_Activities == "No"), 100)]
+
+# Histogram of attendance rates by extracurricular activities
+par(mfrow = c(1, 2))
+hist(participate_extracurricular_attendance, main = "Extracurricular Activities", xlab = "Attendance Rate", col = "skyblue", border = "black")
+hist(do_not_participate_extracurricular_attendance, main = "No Extracurricular Activities", xlab = "Attendance Rate", col = "skyblue", border = "black")
+
+# Check assumptions of ANOVA
+shapiro.test(participate_extracurricular_attendance)
+shapiro.test(do_not_participate_extracurricular_attendance)
+```
+
+Both histograms and the Shapiro-Wilk test show that the distribution of attendance rates is not normal for all students. We will now use Kruksal-Wallis test to test for differences in attendance rates based on participation in extracurricular activities.
+
+```{r}
+# Kruksal-Wallis test
+kruskal.test(Attendance ~ Extracurricular_Activities, data = student_data)
+```
+
+The Kruskal-Wallis test shows that there is no significant difference in the average attendance rates based on participation in extracurricular activities, with a p-value greater than 0.05. This indicates that participation in extracurricular activities does not have a significant impact on attendance rates.
+
 

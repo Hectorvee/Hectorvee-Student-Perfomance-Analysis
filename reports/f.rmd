@@ -1,0 +1,858 @@
+
+# Distribution of Final Exam Scores
+
+## Distribution of Final Exam Scores(Without Considering Other Factors)
+Here we will explore the distribution of final exam scores among students with without considering other factors.
+To find our the distribution of final exam scores, we first need to sample the data and plot a histogram.
+```{r}
+# Sample the data
+set.seed(123)
+exam_score_sample <- student_data$Exam_Score[sample(nrow(student_data), 100)]
+exam_score_sample
+
+# Plot histogram
+hist(exam_score_sample, main = "Distribution of Final Exam Scores", xlab = "Final Exam Score", col = "skyblue", border = "black")
+```
+
+From the histogram, we can see that the distribution of final exam scores is approximately normal. We now plot a boxplot to visualize the spread of scores and identify any outliers.
+```{r}
+# Boxplot of final exam scores
+boxplot(exam_score_sample, main = "Boxplot of Final Exam Scores", col = "skyblue", border = "black")
+```
+
+The boxplot shows that the distribution of final exam scores is centered around the median, with a few outliers on the lower end of the scale. Now we use numerical methods to confirm the normality of the distribution.
+```{r}
+# Shapiro-Wilk test for normality
+shapiro.test(exam_score_sample)
+```
+
+The Shapiro-Wilk test confirms that the distribution of final exam scores is approximately normal, with a p-value greater than 0.05.
+
+## Distribution of Final Exam Scores (Parental_Involvement Category)
+
+Next, we explore the distribution of final exam scores based on parental involvement levels. We will create a boxplot to compare the scores of students with different levels of parental involvement.
+```{r}
+# Sample the data
+high_parental_involvement <- student_data$Exam_Score[student_data$Parental_Involvement == "High"][sample(sum(student_data$Parental_Involvement == "High"), 100)]
+medium_parental_involvement <- student_data$Exam_Score[student_data$Parental_Involvement == "Medium"][sample(sum(student_data$Parental_Involvement == "Medium"), 100)]
+low_parental_involvement <- student_data$Exam_Score[student_data$Parental_Involvement == "Low"][sample(sum(student_data$Parental_Involvement == "Low"), 100)]
+
+# Histogram of final exam scores by parental involvement
+par(mfrow = c(1, 3))
+hist(high_parental_involvement, main = "High Parental Involvement", xlab = "Final Exam Score", col = "skyblue", border = "black")
+hist(medium_parental_involvement, main = "Medium Parental Involvement", xlab = "Final Exam Score", col = "skyblue", border = "black")
+hist(low_parental_involvement, main = "Low Parental Involvement", xlab = "Final Exam Score", col = "skyblue", border = "black")
+```
+
+The three histograms show the distribution of final exam scores for students with high, medium, and low levels of parental involvement. We can see that the distribution of the scores seems to be similar across all three categories. They seem to follow a normal distribution, with a slight skew towards higher scores for students with high parental involvement.
+We now use numerical methods to confirm the normality of the distributions.
+```{r}
+# Shapiro-Wilk test for normality
+shapiro.test(high_parental_involvement)
+shapiro.test(medium_parental_involvement)
+shapiro.test(low_parental_involvement)
+```
+
+The Shapiro-Wilk test confirms that the distributions of final exam scores for students with high and medium levels of parental involvement are approximately normal, with p-values greater than 0.05. However, the distribution for students with low parental involvement is slightly skewed, with a p-value less than 0.05.
+
+We now investigate the distribution of final exam scores for students with low parental involvement further. We will now plot a density plot to visualize the distribution more clearly.
+```{r}
+# Density plot of final exam scores for students with low parental involvement
+plot(density(low_parental_involvement), main = "Density Plot of Final Exam Scores for Low Parental Involvement", xlab = "Final Exam Score", col = "skyblue")
+```
+
+The density plot shows that the distribution of final exam is slightly skewed to the left for students with low parental involvement. We will now create a QQ plot to compare the distribution of scores to a normal distribution.
+
+```{r}
+# QQ plot of final exam scores for students with low parental involvement
+qqnorm(low_parental_involvement, main = "QQ Plot of Final Exam Scores for Low Parental Involvement", col = "skyblue")
+qqline(low_parental_involvement, col = "red")
+```
+
+The QQ plot confirms that the distribution of final exam scores for students with low parental involvement is slightly skewed to the left, deviating from a normal distribution.
+
+## Distribution of Final Exam Scores (Access_to_Resources Category)
+
+Next, we explore the distribution of final exam scores based on access to resources. We will create a boxplot to compare the scores of students with different levels of access to resources.
+```{r}
+# Sample the data
+high_access_to_resources <- student_data$Exam_Score[student_data$Access_to_Resources == "High"][sample(sum(student_data$Access_to_Resources == "High"), 100)]
+medium_access_to_resources <- student_data$Exam_Score[student_data$Access_to_Resources == "Medium"][sample(sum(student_data$Access_to_Resources == "Medium"), 100)]
+low_access_to_resources <- student_data$Exam_Score[student_data$Access_to_Resources == "Low"][sample(sum(student_data$Access_to_Resources == "Low"), 100)]
+
+# Histogram of final exam scores by access to resources
+par(mfrow = c(1, 3))
+hist(high_access_to_resources, main = "High Access to Resources", xlab = "Final Exam Score", col = "skyblue", border = "black")
+hist(medium_access_to_resources, main = "Medium Access to Resources", xlab = "Final Exam Score", col = "skyblue", border = "black")
+hist(low_access_to_resources, main = "Low Access to Resources", xlab = "Final Exam Score", col = "skyblue", border = "black")
+
+plot(density(low_access_to_resources), main = "Low Access to Resources", xlab = "Final Exam Score", col = "skyblue")
+plot(density(medium_access_to_resources), main = "Medium Access to Resources", xlab = "Final Exam Score", col = "skyblue")
+plot(density(high_access_to_resources), main = "High Access to Resources", xlab = "Final Exam Score", col = "skyblue")
+```
+
+The histograms and density plots show the distribution of final exam scores for students with high, medium, and low levels of access to resources. The distributions seem to be similar across all three categories, with a slight skew towards higher scores for students with high access to resources. We will now use numerical methods to confirm the normality of the distributions.
+
+```{r}
+# Shapiro-Wilk test for normality
+shapiro.test(high_access_to_resources)
+shapiro.test(medium_access_to_resources)
+shapiro.test(low_access_to_resources)
+```
+
+The Shapiro-Wilk test shows that the distribution of all three categories of access to resources is not normal, with p-values less than 0.05. This indicates that the distribution of final exam scores is skewed for students with different levels of access to resources.
+
+## Distribution of Final Exam Scores (Extracurricular_Activities Category)
+
+Next, we explore the distribution of final exam scores based on participation in extracurricular activities. We will create a boxplot to compare the scores of students who participate in extracurricular activities and those who do not.
+```{r}
+# Sample the data
+participate_extracurricular <- student_data$Exam_Score[student_data$Extracurricular_Activities == "Yes"][sample(sum(student_data$Extracurricular_Activities == "Yes"), 100)]
+do_not_participate_extracurricular <- student_data$Exam_Score[student_data$Extracurricular_Activities == "No"][sample(sum(student_data$Extracurricular_Activities == "No"), 100)]
+
+# Boxplot of final exam scores by extracurricular activities
+boxplot(student_data$Exam_Score ~ student_data$Extracurricular_Activities, main = "Final Exam Scores by Extracurricular Activities", xlab = "Extracurricular Activities", ylab = "Final Exam Score", col = "skyblue", border = "black")
+```
+
+The boxplot shows that students who participate in extracurricular activities tend to have higher final exam scores compared to those who do not. Now we will visualize the distribution of scores for both groups using histograms.
+```{r}
+# Histogram of final exam scores by extracurricular activities
+par(mfrow = c(1, 2))
+hist(participate_extracurricular, main = "Extracurricular Activities", xlab = "Final Exam Score", col = "skyblue", border = "black")
+hist(do_not_participate_extracurricular, main = "No Extracurricular Activities", xlab = "Final Exam Score", col = "skyblue", border = "black")
+```
+
+Both histograms show right skewed distributions, with students who participate in extracurricular activities having higher final exam scores. We will now use numerical methods to confirm the normality of the distributions with the following hypothesis test.
+
+- Null Hypothesis ($H_0$): The distribution of final exam scores for students who participate in extracurricular activities is normal.
+- Alternative Hypothesis ($H_1$): The distribution of final exam scores for students who participate in extracurricular activities is not normal.
+
+```{r}
+# Shapiro-Wilk test for normality
+shapiro.test(participate_extracurricular)
+```
+
+The Shapiro-Wilk test confirms that the distribution of final exam scores for students who participate in extracurricular activities is not normal, with a p-value less than 0.05. Thus, we reject the null hypothesis.
+
+## Distribution of Final Exam Scores (Motivation_Level Category)
+
+Next we explore the distribution of final exam scores based on motivation levels. We will create a histogram to compare the scores of students with different motivation levels.
+```{r}
+# Smaple Data
+high_motivation <- student_data$Exam_Score[student_data$Motivation_Level == "High"][sample(sum(student_data$Motivation_Level == "High"), 100)]
+medium_motivation <- student_data$Exam_Score[student_data$Motivation_Level == "High"][sample(sum(student_data$Motivation_Level == "Medium"), 100)]
+low_motivation <- student_data$Exam_Score[student_data$Motivation_Level == "High"][sample(sum(student_data$Motivation_Level == "Low"), 100)]
+
+# Histogram of final exam scores by motivation level
+par(mfrow = c(1, 3))
+hist(high_motivation, main = "High Motivation Level", xlab = "Final Exam Score", col = "skyblue", border = "black")
+hist(medium_motivation, main = "Medium Motivation Level", xlab = "Final Exam Score", col = "skyblue", border = "black")
+hist(low_motivation, main = "Low Motivation Level", xlab = "Final Exam Score", col = "skyblue", border = "black")
+```
+
+The histograms for High and medium motivation levels show a normal distribution of final exam scores, while the low motivation level histogram shows a right-skewed distribution. We will now use numerical methods to confirm the normality of the distributions.
+
+```{r}
+# Shapiro-Wilk test for normality
+shapiro.test(high_motivation)
+shapiro.test(medium_motivation)
+shapiro.test(low_motivation)
+```
+
+The Shapiro-Wilk test confirms that the distributions of final exam scores for students with high and medium motivation levels are approximately normal, with p-values greater than 0.05. However, the distribution for students with low motivation levels is slightly skewed, with a p-value less than 0.05.
+
+## Distribution of Final Exam Scores (Internet_Access Category)
+
+Next, we explore the distribution of final exam scores based on internet access. We will create a boxplot to compare the scores of students with and without internet access.
+```{r}
+# Sample the data
+internet_access <- student_data$Exam_Score[student_data$Internet_Access == "Yes"][sample(sum(student_data$Internet_Access == "Yes"), 100)]
+no_internet_access <- student_data$Exam_Score[student_data$Internet_Access == "No"][sample(sum(student_data$Internet_Access == "No"), 100)]
+
+# Boxplot of final exam scores by internet access
+boxplot(student_data$Exam_Score ~ student_data$Internet_Access, main = "Final Exam Scores by Internet Access", xlab = "Internet Access", ylab = "Final Exam Score", col = "skyblue", border = "black")
+
+# Histogram of final exam scores by internet access
+par(mfrow = c(1, 2))
+hist(internet_access, main = "Internet Access", xlab = "Final Exam Score", col = "skyblue", border = "black")
+hist(no_internet_access, main = "No Internet Access", xlab = "Final Exam Score", col = "skyblue", border = "black")
+
+# Shapiro-Wilk test for normality
+shapiro.test(internet_access)
+shapiro.test(no_internet_access)
+```
+
+The boxplot shows that students with internet access tend to have higher final exam scores compared to those without internet access. The histograms show that the distribution of final exam scores for students with no internet access is approximately normal, while the distribution for students with internet access is slightly skewed. The Shapiro-Wilk test confirms that the distribution of final exam scores for students without internet access is normal, with a p-value greater than 0.05. However, the distribution for students with internet access is slightly skewed, with a p-value less than 0.05.
+
+## Summary of Distribution Analysis
+
+In summary, the distribution of final exam scores is approximately normal when considering all students. However, when examining the scores based on other factors such as parental involvement, access to resources, extracurricular activities, and motivation levels, the distributions vary. Students with high parental involvement and high access to resources tend to have higher final exam scores, while students who participate in extracurricular activities also perform better. Motivation levels also play a role in student performance, with students who are highly motivated achieving higher scores.
+
+# Average number of hours students study per week
+
+## Average Number of Hours Students Study per Week (Without Considering Other Factors)
+
+Next, we explore the average number of hours students study per week without considering other factors.
+```{r}
+# Summary statistics for study hours
+summary(student_data$Hours_Studied)
+```
+
+The summary statistics show that the average number of hours students study per week is approximately 19.98 hours. We will now visualize the distribution of study hours using a histogram.
+```{r}
+# Histogram of study hours
+hist(student_data$Hours_Studied, main = "Distribution of Study Hours", xlab = "Study Hours", col = "skyblue", border = "black")
+```
+
+The distribution of study hours is approximately normal. We will now use numerical methods to confirm the normality of the distribution.
+
+```{r}
+# Shapiro-Wilk test for normality
+sample_hours_studied <- student_data$Hours_Studied[sample(nrow(student_data), 100)]
+shapiro.test(sample_hours_studied)
+```
+
+The p-value is greater than 0.05, indicating that the distribution of study hours is approximately normal.
+
+## Average Number of Hours Students Study per Week (Parental_Involvement Category)
+
+Next, we will explore the average number of hours students study per week based on parental involvement levels.
+```{r}
+# Summary statistics for study hours by parental involvement
+summary(student_data$Hours_Studied[student_data$Parental_Involvement == "High"])
+summary(student_data$Hours_Studied[student_data$Parental_Involvement == "Medium"])
+summary(student_data$Hours_Studied[student_data$Parental_Involvement == "Low"])
+```
+
+The summary statistics of the average number of hours students study per week based on parental involvement levels do not show significant differences. We will now use ANOVA to test for differences in study hours based on parental involvement levels. But first, we need to check the assumptions of ANOVA.
+```{r}
+# Sample the data
+high_parental_involvement <- student_data$Hours_Studied[student_data$Parental_Involvement == "High"][sample(sum(student_data$Parental_Involvement == "High"), 100)]
+medium_parental_involvement <- student_data$Hours_Studied[student_data$Parental_Involvement == "Medium"][sample(sum(student_data$Parental_Involvement == "Medium"), 100)]
+low_parental_involvement <- student_data$Hours_Studied[student_data$Parental_Involvement == "Low"][sample(sum(student_data$Parental_Involvement == "Low"), 100)]
+
+# Histogram of study hours by parental involvement
+par(mfrow = c(1, 3))
+hist(high_parental_involvement, main = "High Parental Involvement", xlab = "Study Hours", col = "skyblue", border = "black")
+hist(medium_parental_involvement, main = "Medium Parental Involvement", xlab = "Study Hours", col = "skyblue", border = "black")
+hist(low_parental_involvement, main = "Low Parental Involvement", xlab = "Study Hours", col = "skyblue", border = "black")
+
+
+# Check assumptions of ANOVA
+shapiro.test(high_parental_involvement)
+shapiro.test(medium_parental_involvement)
+shapiro.test(low_parental_involvement)
+```
+
+Both the histograms and the Shapiro-Wilk test show that the distribution of study hours is approximately normal for all students. We will now use ANOVA to test for differences in study hours based on parental involvement levels.
+```{r}
+# ANOVA test for study hours by parental involvement
+anova_parental_involvement <- aov(Hours_Studied ~ Parental_Involvement, data = student_data)
+summary(anova_parental_involvement)
+```
+
+The ANOVA test shows that there is no significant difference in the average number of hours students study per week based on parental involvement levels, with a p-value greater than 0.05. This indicates that parental involvement does not have a significant impact on the number of hours students study per week.
+
+## Average Number of Hours Students Study per Week (Access_to_Resources Category)
+
+We now explore the average number of hours students study per week based on access to resources.
+
+```{r}
+summary(student_data$Hours_Studied[student_data$Access_to_Resources == "High"])
+summary(student_data$Hours_Studied[student_data$Access_to_Resources == "Medium"])
+summary(student_data$Hours_Studied[student_data$Access_to_Resources == "Low"])
+```
+
+The summary statistics of the average number of hours students study per week based on access to resources do not show significant differences. We will now use ANOVA to test for differences in study hours based on access to resources. But first, we need to check the assumptions of ANOVA.
+
+```{r}
+# Sample the data
+high_access_to_resources <- student_data$Hours_Studied[student_data$Access_to_Resources == "High"][sample(sum(student_data$Access_to_Resources == "High"), 100)]
+medium_access_to_resources <- student_data$Hours_Studied[student_data$Access_to_Resources == "Medium"][sample(sum(student_data$Access_to_Resources == "Medium"), 100)]
+low_access_to_resources <- student_data$Hours_Studied[student_data$Access_to_Resources == "Low"][sample(sum(student_data$Access_to_Resources == "Low"), 100)]
+
+# Histogram of study hours by access to resources
+par(mfrow = c(1, 3))
+hist(high_access_to_resources, main = "High Access to Resources", xlab = "Study Hours", col = "skyblue", border = "black")
+hist(medium_access_to_resources, main = "Medium Access to Resources", xlab = "Study Hours", col = "skyblue", border = "black")
+hist(low_access_to_resources, main = "Low Access to Resources", xlab = "Study Hours", col = "skyblue", border = "black")
+
+# Check assumptions of ANOVA
+shapiro.test(high_access_to_resources)
+shapiro.test(medium_access_to_resources)
+shapiro.test(low_access_to_resources)
+```
+
+Both the histograms and the Shapiro-Wilk test show that the distribution of study hours is approximately normal for all students. We will now use ANOVA to test for differences in study hours based on access to resources.
+```{r}
+# ANOVA test for study hours by access to resources
+anova_access_to_resources <- aov(Hours_Studied ~ Access_to_Resources, data = student_data)
+summary(anova_access_to_resources)
+```
+
+The ANOVA test shows that there is no significant difference in the average number of hours students study per week based on access to resources, with a p-value greater than 0.05. This indicates that access to resources does not have a significant impact on the number of hours students study per week.
+
+## Average Number of Hours Students Study per Week (Extracurricular_Activities Category)
+
+Next, we explore the average number of hours students study per week based on participation in extracurricular activities.
+```{r}
+# Summary statistics for study hours by extracurricular activities
+summary(student_data$Hours_Studied[student_data$Extracurricular_Activities == "Yes"])
+summary(student_data$Hours_Studied[student_data$Extracurricular_Activities == "No"])
+```
+
+The summary statistics of the average number of hours students study per week based on participation in extracurricular activities show no significant differences. We will now use ANOVA to test for differences in study hours based on participation in extracurricular activities. But first, we need to check the assumptions of ANOVA.
+
+```{r}
+# Sample the data
+participate_extracurricular <- student_data$Hours_Studied[student_data$Extracurricular_Activities == "Yes"][sample(sum(student_data$Extracurricular_Activities == "Yes"), 100)]
+do_not_participate_extracurricular <- student_data$Hours_Studied[student_data$Extracurricular_Activities == "No"][sample(sum(student_data$Extracurricular_Activities == "No"), 100)]
+
+# Histogram of study hours by extracurricular activities
+par(mfrow = c(1, 2))
+hist(participate_extracurricular, main = "Extracurricular Activities", xlab = "Study Hours", col = "skyblue", border = "black")
+hist(do_not_participate_extracurricular, main = "No Extracurricular Activities", xlab = "Study Hours", col = "skyblue", border = "black")
+
+# Check assumptions of ANOVA
+shapiro.test(participate_extracurricular)
+shapiro.test(do_not_participate_extracurricular)
+```
+
+Both the histograms and the Shapiro-Wilk test show that the distribution of study hours is approximately normal for all students. We will now use ANOVA to test for differences in study hours based on participation in extracurricular activities.
+
+```{r}
+# ANOVA test for study hours by extracurricular activities
+anova_extracurricular_activities <- aov(Hours_Studied ~ Extracurricular_Activities, data = student_data)
+summary(anova_extracurricular_activities)
+```
+
+The ANOVA test shows that there is no significant difference in the average number of hours students study per week based on participation in extracurricular activities, with a p-value greater than 0.05. This indicates that participation in extracurricular activities does not have a significant impact on the number of hours students study per week.
+
+## Average Number of Hours Students Study per Week (Motivation_Level Category)
+
+Next, we explore the average number of hours students study per week based on motivation levels.
+```{r}
+# Summary statistics for study hours by motivation level
+summary(student_data$Hours_Studied[student_data$Motivation_Level == "High"])
+summary(student_data$Hours_Studied[student_data$Motivation_Level == "Medium"])
+summary(student_data$Hours_Studied[student_data$Motivation_Level == "Low"])
+```
+
+The summary statistics of the average number of hours students study per week based on motivation levels show no significant differences. We will now use ANOVA to test for differences in study hours based on motivation levels. But first, we need to check the assumptions of ANOVA.
+
+```{r}
+# Sample the data
+high_motivation <- student_data$Hours_Studied[student_data$Motivation_Level == "High"][sample(sum(student_data$Motivation_Level == "High"), 100)]
+medium_motivation <- student_data$Hours_Studied[student_data$Motivation_Level == "Medium"][sample(sum(student_data$Motivation_Level == "Medium"), 100)]
+low_motivation <- student_data$Hours_Studied[student_data$Motivation_Level == "Low"][sample(sum(student_data$Motivation_Level == "Low"), 100)]
+
+# Histogram of study hours by motivation level
+par(mfrow = c(1, 3))
+hist(high_motivation, main = "High Motivation Level", xlab = "Study Hours", col = "skyblue", border = "black")
+hist(medium_motivation, main = "Medium Motivation Level", xlab = "Study Hours", col = "skyblue", border = "black")
+hist(low_motivation, main = "Low Motivation Level", xlab = "Study Hours", col = "skyblue", border = "black")
+
+# Check assumptions of ANOVA
+shapiro.test(high_motivation)
+shapiro.test(medium_motivation)
+shapiro.test(low_motivation)
+```
+
+All three histograms and the Shapiro-Wilk test show that the distribution of study hours is approximately normal for all students. We will now use ANOVA to test for differences in study hours based on motivation levels.
+
+```{r}
+# ANOVA test for study hours by motivation level
+anova_motivation_level <- aov(Hours_Studied ~ Motivation_Level, data = student_data)
+summary(anova_motivation_level)
+```
+
+The ANOVA test shows that there is no significant difference in the average number of hours students study per week based on motivation levels, with a p-value greater than 0.05. This indicates that motivation levels do not have a significant impact on the number of hours students study per week.
+
+## Average Number of Hours Students Study per Week (Internet Access Category)
+
+Next, we explore the average number of hours students study per week based on internet access.
+
+```{r}
+# Summary statistics for study hours by internet access
+summary(student_data$Hours_Studied[student_data$Internet_Access == "Yes"])
+summary(student_data$Hours_Studied[student_data$Internet_Access == "No"])
+```
+
+The summary statistics of the average number of hours students study per week based on internet access show no significant differences. We will now use ANOVA to test for differences in study hours based on internet access. But first, we need to check the assumptions of ANOVA.
+
+```{r}
+# Sample the data
+internet_access <- student_data$Hours_Studied[student_data$Internet_Access == "Yes"][sample(sum(student_data$Internet_Access == "Yes"), 100)]
+no_internet_access <- student_data$Hours_Studied[student_data$Internet_Access == "No"][sample(sum(student_data$Internet_Access == "No"), 100)]
+
+# Histogram of study hours by internet access
+par(mfrow = c(1, 2))
+hist(internet_access, main = "Internet Access", xlab = "Study Hours", col = "skyblue", border = "black")
+hist(no_internet_access, main = "No Internet Access", xlab = "Study Hours", col = "skyblue", border = "black")
+
+# Check assumptions of ANOVA
+shapiro.test(internet_access)
+shapiro.test(no_internet_access)
+```
+
+Both the histograms and the Shapiro-Wilk test show that the distribution of study hours is approximately normal for all students. We will now use ANOVA to test for differences in study hours based on internet access.
+
+```{r}
+# ANOVA test for study hours by internet access
+anova_internet_access <- aov(Hours_Studied ~ Internet_Access, data = student_data)
+summary(anova_internet_access)
+```
+
+The ANOVA test shows that there is no significant difference in the average number of hours students study per week based on internet access, with a p-value greater than 0.05. This indicates that internet access does not have a significant impact on the number of hours students study per week.
+
+## Average Number of Hours Students Study per Week (Family Income Category)
+
+Next, we explore the average number of hours students study per week based on family income levels.
+
+```{r}
+# Summary statistics for study hours by family income
+summary(student_data$Hours_Studied[student_data$Family_Income == "Low"])
+summary(student_data$Hours_Studied[student_data$Family_Income == "Medium"])
+summary(student_data$Hours_Studied[student_data$Family_Income == "High"])
+```
+
+The summary statistics of the average number of hours students study per week based on family income levels show no significant differences. We will now use ANOVA to test for differences in study hours based on family income levels. But first, we need to check the assumptions of ANOVA.
+
+```{r}
+# Sample the data
+low_family_income <- student_data$Hours_Studied[student_data$Family_Income == "Low"][sample(sum(student_data$Family_Income == "Low"), 100)]
+medium_family_income <- student_data$Hours_Studied[student_data$Family_Income == "Medium"][sample(sum(student_data$Family_Income == "Medium"), 100)]
+high_family_income <- student_data$Hours_Studied[student_data$Family_Income == "High"][sample(sum(student_data$Family_Income == "High"), 100)]
+
+# Histogram of study hours by family income
+par(mfrow = c(1, 3))
+hist(low_family_income, main = "Low Family Income", xlab = "Study Hours", col = "skyblue", border = "black")
+hist(medium_family_income, main = "Medium Family Income", xlab = "Study Hours", col = "skyblue", border = "black")
+hist(high_family_income, main = "High Family Income", xlab = "Study Hours", col = "skyblue", border = "black")
+
+# Check assumptions of ANOVA
+shapiro.test(low_family_income)
+shapiro.test(medium_family_income)
+shapiro.test(high_family_income)
+```
+
+The Shapiro-Wilk test shows that the distribution of study hours is approximately normal for students with medium and high family income levels, with p-values greater than 0.05. However, the distribution for students with low family income is slightly skewed, with a p-value less than 0.05 indicating that the distribution is not normal. We will now use Kruksal-Wallis test to test for differences in study hours based on family income levels.
+
+```{r}
+# Kruskal-Wallis test for study hours by family income
+kruskal.test(Hours_Studied ~ Family_Income, data = student_data)
+```
+
+The Kruskal-Wallis test shows that there is no significant difference in the average number of hours students study per week based on family income levels, with a p-value greater than 0.05. This indicates that family income does not have a significant impact on the number of hours students study per week.
+
+## Average Number of Hours Students Study per Week (Teacher Quality Category)
+
+Next, we explore the average number of hours students study per week based on teacher quality levels.
+
+```{r}
+# Summary statistics for study hours by teacher quality
+summary(student_data$Hours_Studied[student_data$Teacher_Quality == "Low"])
+summary(student_data$Hours_Studied[student_data$Teacher_Quality == "Medium"])
+summary(student_data$Hours_Studied[student_data$Teacher_Quality == "High"])
+```
+
+The summary statistics of the average number of hours students study per week based on teacher quality levels show no significant differences. We will now use ANOVA to test for differences in study hours based on teacher quality levels. But first, we need to check the assumptions of ANOVA.
+
+```{r}
+# Sample the data
+low_teacher_quality <- student_data$Hours_Studied[student_data$Teacher_Quality == "Low"][sample(sum(student_data$Teacher_Quality == "Low"), 100)]
+medium_teacher_quality <- student_data$Hours_Studied[student_data$Teacher_Quality == "Medium"][sample(sum(student_data$Teacher_Quality == "Medium"), 100)]
+high_teacher_quality <- student_data$Hours_Studied[student_data$Teacher_Quality == "High"][sample(sum(student_data$Teacher_Quality == "High"), 100)]
+
+# Histogram of study hours by teacher quality
+par(mfrow = c(1, 3))
+hist(low_teacher_quality, main = "Low Teacher Quality", xlab = "Study Hours", col = "skyblue", border = "black")
+hist(medium_teacher_quality, main = "Medium Teacher Quality", xlab = "Study Hours", col = "skyblue", border = "black")
+hist(high_teacher_quality, main = "High Teacher Quality", xlab = "Study Hours", col = "skyblue", border = "black")
+
+# Check assumptions of ANOVA
+shapiro.test(low_teacher_quality)
+shapiro.test(medium_teacher_quality)
+shapiro.test(high_teacher_quality)
+```
+
+All three histograms and the Shapiro-Wilk test show that the distribution of study hours is approximately normal for all students. We will now use ANOVA to test for differences in study hours based on teacher quality levels.
+
+```{r}
+# ANOVA test for study hours by teacher quality
+anova_teacher_quality <- aov(Hours_Studied ~ Teacher_Quality, data = student_data)
+summary(anova_teacher_quality)
+```
+
+The ANOVA test shows that there is no significant difference in the average number of hours students study per week based on teacher quality levels, with a p-value greater than 0.05. This indicates that teacher quality does not have a significant impact on the number of hours students study per week.
+
+## Average Number of Hours Students Study per Week (School Type Category)
+
+Next, we explore the average number of hours students study per week based on school type.
+
+```{r}
+# Summary statistics for study hours by school type
+summary(student_data$Hours_Studied[student_data$School_Type == "Public"])
+summary(student_data$Hours_Studied[student_data$School_Type == "Private"])
+```
+
+The summary statistics of the average number of hours students study per week based on school type show no significant differences. We will now use ANOVA to test for differences in study hours based on school type. But first, we need to check the assumptions of ANOVA.
+
+```{r}
+# Sample the data
+public_school <- student_data$Hours_Studied[student_data$School_Type == "Public"][sample(sum(student_data$School_Type == "Public"), 100)]
+private_school <- student_data$Hours_Studied[student_data$School_Type == "Private"][sample(sum(student_data$School_Type == "Private"), 100)]
+
+# Histogram of study hours by school type
+par(mfrow = c(1, 2))
+hist(public_school, main = "Public School", xlab = "Study Hours", col = "skyblue", border = "black")
+hist(private_school, main = "Private School", xlab = "Study Hours", col = "skyblue", border = "black")
+
+# Check assumptions of ANOVA
+shapiro.test(public_school)
+shapiro.test(private_school)
+```
+
+Both histograms and the Shapiro-Wilk test show that the distribution of study hours is approximately normal for all students. We will now use ANOVA to test for differences in study hours based on school type.
+
+```{r}
+# ANOVA test for study hours by school type
+anova_school_type <- aov(Hours_Studied ~ School_Type, data = student_data)
+summary(anova_school_type)
+```
+
+The ANOVA test shows that there is no significant difference in the average number of hours students study per week based on school type, with a p-value greater than 0.05. This indicates that school type does not have a significant impact on the number of hours students study per week.
+
+## Average Number of Hours Students Study per Week (Peer Influence Category)
+
+Next, we explore the average number of hours students study per week based on peer influence levels.
+
+```{r}
+# Summary statistics for study hours by peer influence
+summary(student_data$Hours_Studied[student_data$Peer_Influence == "Positive"])
+summary(student_data$Hours_Studied[student_data$Peer_Influence == "Negative"])
+summary(student_data$Hours_Studied[student_data$Peer_Influence == "Neutral"])
+```
+
+The summary statistics of the average number of hours students study per week based on peer influence levels show no significant differences. We will now use ANOVA to test for differences in study hours based on peer influence levels. But first, we need to check the assumptions of ANOVA.
+
+```{r}
+# Sample the data
+positive_peer_influence <- student_data$Hours_Studied[student_data$Peer_Influence == "Positive"][sample(sum(student_data$Peer_Influence == "Positive"), 100)]
+negative_peer_influence <- student_data$Hours_Studied[student_data$Peer_Influence == "Negative"][sample(sum(student_data$Peer_Influence == "Negative"), 100)]
+neutral_peer_influence <- student_data$Hours_Studied[student_data$Peer_Influence == "Neutral"][sample(sum(student_data$Peer_Influence == "Neutral"), 100)]
+
+# Histogram of study hours by peer influence
+par(mfrow = c(1, 3))
+hist(positive_peer_influence, main = "Positive Peer Influence", xlab = "Study Hours", col = "skyblue", border = "black")
+hist(negative_peer_influence, main = "Negative Peer Influence", xlab = "Study Hours", col = "skyblue", border = "black")
+hist(neutral_peer_influence, main = "Neutral Peer Influence", xlab = "Study Hours", col = "skyblue", border = "black")
+
+# Check assumptions of ANOVA
+shapiro.test(positive_peer_influence)
+shapiro.test(negative_peer_influence)
+shapiro.test(neutral_peer_influence)
+```
+
+All three histograms and the Shapiro-Wilk test show that the distribution of study hours is approximately normal for all students. We will now use ANOVA to test for differences in study hours based on peer influence levels.
+
+```{r}
+# ANOVA test for study hours by peer influence
+anova_peer_influence <- aov(Hours_Studied ~ Peer_Influence, data = student_data)
+summary(anova_peer_influence)
+```
+
+The ANOVA test shows that there is no significant difference in the average number of hours students study per week based on peer influence levels, with a p-value greater than 0.05. This indicates that peer influence does not have a significant impact on the number of hours students study per week.
+
+## Average Number of Hours Students Study per Week (Learning Disability Category)
+
+Next, we explore the average number of hours students study per week based on learning disability.
+
+```{r}
+# Summary statistics for study hours by learning disability
+summary(student_data$Hours_Studied[student_data$Learning_Disabilities == "Yes"])
+summary(student_data$Hours_Studied[student_data$Learning_Disabilities == "No"])
+```
+
+The summary statistics of the average number of hours students study per week based on learning disability show no significant differences. We will now use ANOVA to test for differences in study hours based on learning disability. But first, we need to check the assumptions of ANOVA.
+
+```{r}
+# Sample the data
+learning_disabilities <- student_data$Hours_Studied[student_data$Learning_Disabilities == "Yes"][sample(sum(student_data$Learning_Disabilities == "Yes"), 100)]
+no_learning_disabilities <- student_data$Hours_Studied[student_data$Learning_Disabilities == "No"][sample(sum(student_data$Learning_Disabilities == "No"), 100)]
+
+# Histogram of study hours by learning disability
+par(mfrow = c(1, 2))
+hist(learning_disabilities, main = "Learning Disabilities", xlab = "Study Hours", col = "skyblue", border = "black")
+hist(no_learning_disabilities, main = "No Learning Disabilities", xlab = "Study Hours", col = "skyblue", border = "black")
+
+# Check assumptions of ANOVA
+shapiro.test(learning_disabilities)
+shapiro.test(no_learning_disabilities)
+```
+
+All histograms and the Shapiro-Wilk test show that the distribution of study hours is approximately normal for all students. We will now use ANOVA to test for differences in study hours based on learning disability.
+
+```{r}
+# ANOVA test for study hours by learning disability
+anova_learning_disabilities <- aov(Hours_Studied ~ Learning_Disabilities, data = student_data)
+summary(anova_learning_disabilities)
+```
+
+The ANOVA test shows that there is no significant difference in the average number of hours students study per week based on learning disability, with a p-value greater than 0.05. This indicates that learning disabilities do not have a significant impact on the number of hours students study per week.
+
+## Average Number of Hours Students Study per Week (Parental Education Level Category)
+
+Next, we explore the average number of hours students study per week based on parental education levels.
+
+```{r}
+# Summary statistics for study hours by parental education level
+summary(student_data$Hours_Studied[student_data$Parental_Education_Level == "High School"])
+summary(student_data$Hours_Studied[student_data$Parental_Education_Level == "College"])
+summary(student_data$Hours_Studied[student_data$Parental_Education_Level == "Postgraduate"])
+```
+
+The summary statistics of the average number of hours students study per week based on parental education levels show no significant differences. We will now use ANOVA to test for differences in study hours based on parental education levels. But first, we need to check the assumptions of ANOVA.
+
+```{r}
+# Sample the data
+high_school_education <- student_data$Hours_Studied[student_data$Parental_Education_Level == "High School"][sample(sum(student_data$Parental_Education_Level == "High School"), 100)]
+college_education <- student_data$Hours_Studied[student_data$Parental_Education_Level == "College"][sample(sum(student_data$Parental_Education_Level == "College"), 100)]
+postgraduate_education <- student_data$Hours_Studied[student_data$Parental_Education_Level == "Postgraduate"][sample(sum(student_data$Parental_Education_Level == "Postgraduate"), 100)]
+
+# Histogram of study hours by parental education level
+par(mfrow = c(1, 3))
+hist(high_school_education, main = "High School Education", xlab = "Study Hours", col = "skyblue", border = "black")
+hist(college_education, main = "College Education", xlab = "Study Hours", col = "skyblue", border = "black")
+hist(postgraduate_education, main = "Postgraduate Education", xlab = "Study Hours", col = "skyblue", border = "black")
+
+# Check assumptions of ANOVA
+shapiro.test(high_school_education)
+shapiro.test(college_education)
+shapiro.test(postgraduate_education)
+```
+
+All three histograms and the Shapiro-Wilk test show that the distribution of study hours is approximately normal for all students. We will now use ANOVA to test for differences in study hours based on parental education levels.
+
+```{r}
+# ANOVA test for study hours by parental education level
+anova_parental_education_level <- aov(Hours_Studied ~ Parental_Education_Level, data = student_data)
+summary(anova_parental_education_level)
+```
+
+The ANOVA test shows that there is no significant difference in the average number of hours students study per week based on parental education levels, with a p-value greater than 0.05. This indicates that parental education levels do not have a significant impact on the number of hours students study per week.
+
+## Average Number of Hours Students Study per Week (Distance from Home Category)
+
+Next, we explore the average number of hours students study per week based on the distance from home to school.
+
+```{r}
+# Summary statistics for study hours by distance from home (Near, Moderate, Far
+summary(student_data$Hours_Studied[student_data$Distance_from_Home == "Near"])
+summary(student_data$Hours_Studied[student_data$Distance_from_Home == "Moderate"])
+summary(student_data$Hours_Studied[student_data$Distance_from_Home == "Far"])
+```
+
+The summary statistics of the average number of hours students study per week based on the distance from home to school show no significant differences. We will now use ANOVA to test for differences in study hours based on the distance from home to school. But first, we need to check the assumptions of ANOVA.
+
+```{r}
+# Sample the data
+near_distance <- student_data$Hours_Studied[student_data$Distance_from_Home == "Near"][sample(sum(student_data$Distance_from_Home == "Near"), 100)]
+moderate_distance <- student_data$Hours_Studied[student_data$Distance_from_Home == "Moderate"][sample(sum(student_data$Distance_from_Home == "Moderate"), 100)]
+far_distance <- student_data$Hours_Studied[student_data$Distance_from_Home == "Far"][sample(sum(student_data$Distance_from_Home == "Far"), 100)]
+
+# Histogram of study hours by distance from home
+par(mfrow = c(1, 3))
+hist(near_distance, main = "Near Distance from Home", xlab = "Study Hours", col = "skyblue", border = "black")
+hist(moderate_distance, main = "Moderate Distance from Home", xlab = "Study Hours", col = "skyblue", border = "black")
+hist(far_distance, main = "Far Distance from Home", xlab = "Study Hours", col = "skyblue", border = "black")
+
+# Check assumptions of ANOVA
+shapiro.test(near_distance)
+shapiro.test(moderate_distance)
+shapiro.test(far_distance)
+```
+
+All three histograms and the Shapiro-Wilk test show that the distribution of study hours is approximately normal for all students. We will now use ANOVA to test for differences in study hours based on the distance from home to school.
+
+```{r}
+# ANOVA test for study hours by distance from home
+anova_distance_from_home <- aov(Hours_Studied ~ Distance_from_Home, data = student_data)
+summary(anova_distance_from_home)
+```
+
+The ANOVA test shows that there is no significant difference in the average number of hours students study per week based on the distance from home to school, with a p-value greater than 0.05. This indicates that the distance from home to school does not have a significant impact on the number of hours students study per week.
+
+## Average Number of Hours Students Study per Week (Gender Category)
+
+Finally, we explore the average number of hours students study per week based on gender.
+
+```{r}
+# Summary statistics
+summary(student_data$Hours_Studied[student_data$Gender == "Male"])
+summary(student_data$Hours_Studied[student_data$Gender == "Female"])
+```
+
+The summary statistics of the average number of hours students study per week based on gender show no significant differences. We will now use ANOVA to test for differences in study hours based on gender. But first, we need to check the assumptions of ANOVA.
+
+```{r}
+# Sample the data
+male_data <- student_data$Hours_Studied[student_data$Gender == "Male"][sample(sum(student_data$Gender == "Male"), 100)]
+female_data <- student_data$Hours_Studied[student_data$Gender == "Female"][sample(sum(student_data$Gender == "Female"), 100)]
+
+# Histogram
+par(mfrow = c(1, 2))
+hist(male_data, main = "Male", xlab = "Study Hours", col = "skyblue", border = "black")
+hist(female_data, main = "Female", xlab = "Study Hours", col = "skyblue", border = "black")
+
+# Check assumptions of ANOVA
+shapiro.test(male_data)
+shapiro.test(female_data)
+```
+
+Both histograms and the Shapiro-Wilk test show that the distribution of study hours is approximately normal for all students. We will now use ANOVA to test for differences in study hours based gender.
+
+```{r}
+# ANOVA test
+anova_gender <- aov(Hours_Studied ~ Gender, data = student_data)
+summary(anova_gender)
+```
+
+The ANOVA test shows that there is no significant difference in the average number of hours students study based on gender.
+
+## Summary of Average Number of Hours Students Study per Week
+
+In summary, the average number of hours students study per week is approximately 19.98 hours. There are no significant differences in the average number of hours students study per week based on various factors such as parental involvement, access to resources, extracurricular activities, motivation levels, internet access, family income, teacher quality, school type, peer influence, learning disabilities, parental education levels, distance from home to school, and Gender. This indicates that the number of hours students study per week is consistent across different factors.
+
+# The variation in attendance rates across students
+
+Now we analyze the variation in attendance rates across students.
+
+```{r}
+# Sample the data
+sample_attendance <- student_data$Attendance[sample(nrow(student_data), 1000)]
+
+# Summary statistics for attendance rates
+summary(sample_attendance)
+
+# Histogram of attendance rates
+hist(sample_attendance, main = "Distribution of Attendance Rates", xlab = "Attendance Rate", col = "skyblue", border = "black")
+```
+
+From the histogram we can see that the distribution of attendance rates is approximately uniform, ranging from approximately **`60%`** to **`100%`**. We can see one slightly higher peak around **`70%`** to **`80%`**. From this we can see that attendance rates are evenly distributed across students. The average attendance rate is approximately **`79.75%`**, which is relatively high. We now investigate the factors that may influence attendance rates.
+
+## Attendance Rates by Parental Involvement
+
+We will now explore the attendance rates based on parental involvement levels.
+
+```{r}
+# Summary statistics for attendance rates by parental involvement
+summary(student_data$Attendance[student_data$Parental_Involvement == "High"])
+summary(student_data$Attendance[student_data$Parental_Involvement == "Medium"])
+summary(student_data$Attendance[student_data$Parental_Involvement == "Low"])
+```
+
+The summary statistics of the attendance rates based on parental involvement levels show no significant differences. We will now use ANOVA to test for differences in attendance rates based on parental involvement levels. But first, we need to check the assumptions of ANOVA.
+
+```{r}
+# Sample the data
+high_parental_involvement_attendance <- student_data$Attendance[student_data$Parental_Involvement == "High"][sample(sum(student_data$Parental_Involvement == "High"), 100)]
+medium_parental_involvement_attendance <- student_data$Attendance[student_data$Parental_Involvement == "Medium"][sample(sum(student_data$Parental_Involvement == "Medium"), 100)]
+low_parental_involvement_attendance <- student_data$Attendance[student_data$Parental_Involvement == "Low"][sample(sum(student_data$Parental_Involvement == "Low"), 100)]
+
+# Histogram of attendance rates by parental involvement
+par(mfrow = c(1, 3))
+hist(high_parental_involvement_attendance, main = "High Parental Involvement", xlab = "Attendance Rate", col = "skyblue", border = "black")
+hist(medium_parental_involvement_attendance, main = "Medium Parental Involvement", xlab = "Attendance Rate", col = "skyblue", border = "black")
+hist(low_parental_involvement_attendance, main = "Low Parental Involvement", xlab = "Attendance Rate", col = "skyblue", border = "black")
+
+# Check assumptions of ANOVA
+shapiro.test(high_parental_involvement_attendance)
+shapiro.test(medium_parental_involvement_attendance)
+shapiro.test(low_parental_involvement_attendance)
+```
+
+All three histograms and the Shapiro-Wilk test show that the distribution of attendance rates is not normal for all students. We will now use Kruksal-Wallis test to test for differences in attendance rates based on parental involvement levels.
+
+```{r}
+# Kruksal-Wallis test
+kruskal.test(Attendance ~ Parental_Involvement, data = student_data)
+```
+
+The Kruskal-Wallis test shows that there is no significant difference in the average attendance rates based on parental involvement levels, with a p-value greater than 0.05. This indicates that parental involvement does not have a significant impact on attendance rates.
+
+## Attendance Rates by Access to Resources
+
+Next, we explore the attendance rates based on access to resources.
+
+```{r}
+# Summary statistics for attendance rates by access to resources
+summary(student_data$Attendance[student_data$Access_to_Resources == "High"])
+summary(student_data$Attendance[student_data$Access_to_Resources == "Medium"])
+summary(student_data$Attendance[student_data$Access_to_Resources == "Low"])
+```
+
+The summary statistics of the attendance rates based on access to resources show no significant differences. We will now use ANOVA to test for differences in attendance rates based on access to resources. But first, we need to check the assumptions of ANOVA.
+
+```{r}
+# Sample the data
+high_access_to_resources_attendance <- student_data$Attendance[student_data$Access_to_Resources == "High"][sample(sum(student_data$Access_to_Resources == "High"), 100)]
+medium_access_to_resources_attendance <- student_data$Attendance[student_data$Access_to_Resources == "Medium"][sample(sum(student_data$Access_to_Resources == "Medium"), 100)]
+low_access_to_resources_attendance <- student_data$Attendance[student_data$Access_to_Resources == "Low"][sample(sum(student_data$Access_to_Resources == "Low"), 100)]
+
+# Histogram of attendance rates by access to resources
+par(mfrow = c(1, 3))
+hist(high_access_to_resources_attendance, main = "High Access to Resources", xlab = "Attendance Rate", col = "skyblue", border = "black")
+hist(medium_access_to_resources_attendance, main = "Medium Access to Resources", xlab = "Attendance Rate", col = "skyblue", border = "black")
+hist(low_access_to_resources_attendance, main = "Low Access to Resources", xlab = "Attendance Rate", col = "skyblue", border = "black")
+
+# Check assumptions of ANOVA
+shapiro.test(high_access_to_resources_attendance)
+shapiro.test(medium_access_to_resources_attendance)
+shapiro.test(low_access_to_resources_attendance)
+```
+
+All three histograms and the Shapiro-Wilk test show that the distribution of attendance rates is not normal for all students. We will now use Kruksal-Wallis test to test for differences in attendance rates based on access to resources.
+
+```{r}
+# Kruksal-Wallis test
+kruskal.test(Attendance ~ Access_to_Resources, data = student_data)
+```
+
+The Kruskal-Wallis test shows that there is no significant difference in the average attendance rates based on access to resources, with a p-value greater than 0.05. This indicates that access to resources does not have a significant impact on attendance rates.
+
+## Attendance Rates by Extracurricular Activities
+
+Next, we explore the attendance rates based on participation in extracurricular activities.
+
+```{r}
+# Summary statistics for attendance rates by extracurricular activities
+summary(student_data$Attendance[student_data$Extracurricular_Activities == "Yes"])
+summary(student_data$Attendance[student_data$Extracurricular_Activities == "No"])
+```
+
+The summary statistics of the attendance rates based on participation in extracurricular activities show no significant differences. We will now use ANOVA to test for differences in attendance rates based on participation in extracurricular activities. But first, we need to check the assumptions of ANOVA.
+
+```{r}
+# Sample the data
+participate_extracurricular_attendance <- student_data$Attendance[student_data$Extracurricular_Activities == "Yes"][sample(sum(student_data$Extracurricular_Activities == "Yes"), 100)]
+do_not_participate_extracurricular_attendance <- student_data$Attendance[student_data$Extracurricular_Activities == "No"][sample(sum(student_data$Extracurricular_Activities == "No"), 100)]
+
+# Histogram of attendance rates by extracurricular activities
+par(mfrow = c(1, 2))
+hist(participate_extracurricular_attendance, main = "Extracurricular Activities", xlab = "Attendance Rate", col = "skyblue", border = "black")
+hist(do_not_participate_extracurricular_attendance, main = "No Extracurricular Activities", xlab = "Attendance Rate", col = "skyblue", border = "black")
+
+# Check assumptions of ANOVA
+shapiro.test(participate_extracurricular_attendance)
+shapiro.test(do_not_participate_extracurricular_attendance)
+```
+
+Both histograms and the Shapiro-Wilk test show that the distribution of attendance rates is not normal for all students. We will now use Kruksal-Wallis test to test for differences in attendance rates based on participation in extracurricular activities.
+
+```{r}
+# Kruksal-Wallis test
+kruskal.test(Attendance ~ Extracurricular_Activities, data = student_data)
+```
+
+The Kruskal-Wallis test shows that there is no significant difference in the average attendance rates based on participation in extracurricular activities, with a p-value greater than 0.05. This indicates that participation in extracurricular activities does not have a significant impact on attendance rates.
