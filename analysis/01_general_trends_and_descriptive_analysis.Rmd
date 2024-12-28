@@ -167,23 +167,7 @@ shapiro.test(medium_parental_involvement)
 shapiro.test(low_parental_involvement)
 ```
 
-The Shapiro-Wilk test confirms that the distributions of final exam scores for students with high and medium levels of parental involvement are approximately normal, with p-values greater than 0.05. However, the distribution for students with low parental involvement is slightly skewed, with a p-value less than 0.05.
-
-We now investigate the distribution of final exam scores for students with low parental involvement further. We will now plot a density plot to visualize the distribution more clearly.
-```{r}
-# Density plot of final exam scores for students with low parental involvement
-plot(density(low_parental_involvement), main = "Density Plot of Final Exam Scores for Low Parental Involvement", xlab = "Final Exam Score", col = "skyblue")
-```
-
-The density plot shows that the distribution of final exam is slightly skewed to the left for students with low parental involvement. We will now create a QQ plot to compare the distribution of scores to a normal distribution.
-
-```{r}
-# QQ plot of final exam scores for students with low parental involvement
-qqnorm(low_parental_involvement, main = "QQ Plot of Final Exam Scores for Low Parental Involvement", col = "skyblue")
-qqline(low_parental_involvement, col = "red")
-```
-
-The QQ plot confirms that the distribution of final exam scores for students with low parental involvement is slightly skewed to the left, deviating from a normal distribution.
+The Shapiro-Wilk test confirms that the distributions of final exam scores for all students with of parental involvement are approximately normal, with p-values greater than 0.05.
 
 ## Distribution of Final Exam Scores (Access_to_Resources Category)
 
@@ -214,7 +198,7 @@ shapiro.test(medium_access_to_resources)
 shapiro.test(low_access_to_resources)
 ```
 
-The Shapiro-Wilk test shows that the distribution of all three categories of access to resources is not normal, with p-values less than 0.05. This indicates that the distribution of final exam scores is skewed for students with different levels of access to resources.
+The Shapiro-Wilk test confirms that the distributions of final exam scores for students with high resources are approximately normal, with a p-value greater than 0.05. However, the distributions for students with medium and low resources are slightly skewed, with p-values less than 0.05. This conclude that the distribution of final exam scores for students with high resources is normal, while the distributions for students with medium and low resources are slightly skewed.
 
 ## Distribution of Final Exam Scores (Extracurricular_Activities Category)
 
@@ -236,17 +220,15 @@ hist(participate_extracurricular, main = "Extracurricular Activities", xlab = "F
 hist(do_not_participate_extracurricular, main = "No Extracurricular Activities", xlab = "Final Exam Score", col = "skyblue", border = "black")
 ```
 
-Both histograms show right skewed distributions, with students who participate in extracurricular activities having higher final exam scores. We will now use numerical methods to confirm the normality of the distributions with the following hypothesis test.
-
-- Null Hypothesis ($H_0$): The distribution of final exam scores for students who participate in extracurricular activities is normal.
-- Alternative Hypothesis ($H_1$): The distribution of final exam scores for students who participate in extracurricular activities is not normal.
+Both histograms show normal distributions of final exam scores for students who participate in extracurricular activities and those who do not. We will now use numerical methods to confirm the normality of the distributions.
 
 ```{r}
 # Shapiro-Wilk test for normality
 shapiro.test(participate_extracurricular)
+shapiro.test(do_not_participate_extracurricular)
 ```
 
-The Shapiro-Wilk test confirms that the distribution of final exam scores for students who participate in extracurricular activities is not normal, with a p-value less than 0.05. Thus, we reject the null hypothesis.
+The Shapiro-Wilk test confirms that both distributions of final exam scores for students who participate in extracurricular activities and those who do not are approximately normal, with p-values greater than 0.05.
 
 ## Distribution of Final Exam Scores (Motivation_Level Category)
 
@@ -264,7 +246,11 @@ hist(medium_motivation, main = "Medium Motivation Level", xlab = "Final Exam Sco
 hist(low_motivation, main = "Low Motivation Level", xlab = "Final Exam Score", col = "skyblue", border = "black")
 ```
 
-The histograms for High and medium motivation levels show a normal distribution of final exam scores, while the low motivation level histogram shows a right-skewed distribution. We will now use numerical methods to confirm the normality of the distributions.
+- **High Motivation Level**: The distribution is fairly concentrated, with most scores clustered around 65-75. The scores are tightly packed showing a narrower spread. A significant number of students scored within this range indicating a more consistent performance.
+- **Medium Motivation Level**: The distribution is more spread out compared to the "High Motivation" group, with scores roughly between 62 and 74. This indicates a moderate level of variability in the scores. The frequency of scores is lower in each bin compared to the high motivation group, possibly reflecting a smaller group size or less uniform performance.
+- **Low Motivation Level**: The distribution appears skewed toward the lower end, with a noticeable cluster around 60–70. The scores have a wider spread, extending even beyond 85, though with fewer students achieving those high scores. Many students scored toward the lower end of the distribution, suggesting less effective exam performance overall.
+
+Higher motivation levels correlate with more consistent and concentrated exam scores around a central range. Lower motivation levels are associated with greater variability and more scores clustering in the lower range. Motivation level seems to have a strong influence on exam performance, with higher motivation linked to better and more uniform outcomes.
 
 ```{r}
 # Shapiro-Wilk test for normality
@@ -273,7 +259,7 @@ shapiro.test(medium_motivation)
 shapiro.test(low_motivation)
 ```
 
-The Shapiro-Wilk test confirms that the distributions of final exam scores for students with high and medium motivation levels are approximately normal, with p-values greater than 0.05. However, the distribution for students with low motivation levels is slightly skewed, with a p-value less than 0.05.
+The Shapiro-Wilk test confirms that the distributions of final exam scores for students with medium motivation levels are approximately normal, with p-value greater than 0.05. However, the distribution for students with high and low motivation levels is slightly skewed, with a p-value less than 0.05.
 
 ## Distribution of Final Exam Scores (Internet_Access Category)
 
@@ -283,24 +269,26 @@ Next, we explore the distribution of final exam scores based on internet access.
 internet_access <- student_data$Exam_Score[student_data$Internet_Access == "Yes"][sample(sum(student_data$Internet_Access == "Yes"), 100)]
 no_internet_access <- student_data$Exam_Score[student_data$Internet_Access == "No"][sample(sum(student_data$Internet_Access == "No"), 100)]
 
-# Boxplot of final exam scores by internet access
-boxplot(student_data$Exam_Score ~ student_data$Internet_Access, main = "Final Exam Scores by Internet Access", xlab = "Internet Access", ylab = "Final Exam Score", col = "skyblue", border = "black")
-
 # Histogram of final exam scores by internet access
 par(mfrow = c(1, 2))
 hist(internet_access, main = "Internet Access", xlab = "Final Exam Score", col = "skyblue", border = "black")
 hist(no_internet_access, main = "No Internet Access", xlab = "Final Exam Score", col = "skyblue", border = "black")
+```
 
+- **Internet Access**: The distribution appears fairly symmetric, with most scores clustered between 63 and 70. The mode or most frequent score seems to fall around 65-68. Scores are concentrated between 60 and 70 , with few below or above this range. the histogram shows a moderate spread of scores, indicating consistent performance among students.
+- **No Internet Access**: This distribution is slightly skewed, with scores primarily clustered around 65 and extending toward 70. There are some outliers beyond 75. The highest frequency occurs around 65. Scores are more widely distributed compared to the __Internet Access__ group, with some students scoring as low as 55 and others exceeding 80. The group is larger, as seen by the higher frequency values (bars).
+
+```{r}
 # Shapiro-Wilk test for normality
 shapiro.test(internet_access)
 shapiro.test(no_internet_access)
 ```
 
-The boxplot shows that students with internet access tend to have higher final exam scores compared to those without internet access. The histograms show that the distribution of final exam scores for students with no internet access is approximately normal, while the distribution for students with internet access is slightly skewed. The Shapiro-Wilk test confirms that the distribution of final exam scores for students without internet access is normal, with a p-value greater than 0.05. However, the distribution for students with internet access is slightly skewed, with a p-value less than 0.05.
+The Shapiro-Wilk test confirms that the distribution of final exam scores for students with and without internet access is not normal, with a p-value less than 0.05.
 
 ## Summary of Distribution Analysis
 
-In summary, the distribution of final exam scores is approximately normal when considering all students. However, when examining the scores based on other factors such as parental involvement, access to resources, extracurricular activities, and motivation levels, the distributions vary. Students with high parental involvement and high access to resources tend to have higher final exam scores, while students who participate in extracurricular activities also perform better. Motivation levels also play a role in student performance, with students who are highly motivated achieving higher scores.
+In summary, the analysis of the distribution of final exam scores and study hours across various categories such as parental involvement, access to resources, extracurricular activities, motivation levels, internet access, family income, teacher quality, school type, peer influence, learning disabilities, parental education levels, distance from home to school, and gender shows no significant differences. The distributions are approximately normal in most cases, with a few exceptions where the distributions are slightly skewed. Overall, these factors do not have a significant impact on the final exam scores or the number of hours students study per week.
 
 # Average number of hours students study per week
 
@@ -415,7 +403,7 @@ summary(student_data$Hours_Studied[student_data$Extracurricular_Activities == "Y
 summary(student_data$Hours_Studied[student_data$Extracurricular_Activities == "No"])
 ```
 
-The summary statistics of the average number of hours students study per week based on participation in extracurricular activities show no significant differences. We will now use ANOVA to test for differences in study hours based on participation in extracurricular activities. But first, we need to check the assumptions of ANOVA.
+The summary statistics of the average number of hours students study per week based on participation in extracurricular activities show no significant differences. We will now use t-test to test for differences in study hours based on participation in extracurricular activities. But first, we need to check the assumptions of t-test.
 
 ```{r}
 # Sample the data
@@ -427,20 +415,19 @@ par(mfrow = c(1, 2))
 hist(participate_extracurricular, main = "Extracurricular Activities", xlab = "Study Hours", col = "skyblue", border = "black")
 hist(do_not_participate_extracurricular, main = "No Extracurricular Activities", xlab = "Study Hours", col = "skyblue", border = "black")
 
-# Check assumptions of ANOVA
+# Check assumptions of t-test
 shapiro.test(participate_extracurricular)
 shapiro.test(do_not_participate_extracurricular)
 ```
 
-Both the histograms and the Shapiro-Wilk test show that the distribution of study hours is approximately normal for all students. We will now use ANOVA to test for differences in study hours based on participation in extracurricular activities.
+Both the histograms and the Shapiro-Wilk test show that the distribution of study hours is approximately normal for all students. We will now use t-test to test for differences in study hours based on participation in extracurricular activities.
 
 ```{r}
-# ANOVA test for study hours by extracurricular activities
-anova_extracurricular_activities <- aov(Hours_Studied ~ Extracurricular_Activities, data = student_data)
-summary(anova_extracurricular_activities)
+# t-test test for study hours by extracurricular activities
+t.test(participate_extracurricular, do_not_participate_extracurricular)
 ```
 
-The ANOVA test shows that there is no significant difference in the average number of hours students study per week based on participation in extracurricular activities, with a p-value greater than 0.05. This indicates that participation in extracurricular activities does not have a significant impact on the number of hours students study per week.
+The t-test shows that there is no significant difference in the average number of hours students study per week based on participation in extracurricular activities, with a p-value greater than 0.05. This indicates that participation in extracurricular activities does not have a significant impact on the number of hours students study per week.
 
 ## Average Number of Hours Students Study per Week (Motivation_Level Category)
 
@@ -472,15 +459,14 @@ shapiro.test(medium_motivation)
 shapiro.test(low_motivation)
 ```
 
-All three histograms and the Shapiro-Wilk test show that the distribution of study hours is approximately normal for all students. We will now use ANOVA to test for differences in study hours based on motivation levels.
+Shapiro-Wilk test shows that the distribution of study hours of students with medium motivation is not normal, with a p-value less than 0.05. We will now use Kruksal-Wallis test to test for differences in study hours based on motivation levels.
 
 ```{r}
-# ANOVA test for study hours by motivation level
-anova_motivation_level <- aov(Hours_Studied ~ Motivation_Level, data = student_data)
-summary(anova_motivation_level)
+# Kruskal-Wallis test for study hours by motivation level
+kruskal.test(Hours_Studied ~ Motivation_Level, data = student_data)
 ```
 
-The ANOVA test shows that there is no significant difference in the average number of hours students study per week based on motivation levels, with a p-value greater than 0.05. This indicates that motivation levels do not have a significant impact on the number of hours students study per week.
+The Kruskal-Wallis test shows that there is no significant difference in the average number of hours students study per week based on motivation levels, with a p-value greater than 0.05. This indicates that motivation levels do not have a significant impact on the number of hours students study per week.
 
 ## Average Number of Hours Students Study per Week (Internet Access Category)
 
@@ -492,7 +478,7 @@ summary(student_data$Hours_Studied[student_data$Internet_Access == "Yes"])
 summary(student_data$Hours_Studied[student_data$Internet_Access == "No"])
 ```
 
-The summary statistics of the average number of hours students study per week based on internet access show no significant differences. We will now use ANOVA to test for differences in study hours based on internet access. But first, we need to check the assumptions of ANOVA.
+The summary statistics of the average number of hours students study per week based on internet access show no significant differences. We will now use t-test to test for differences in study hours based on internet access. But first, we need to check the assumptions of t-test.
 
 ```{r}
 # Sample the data
@@ -504,20 +490,19 @@ par(mfrow = c(1, 2))
 hist(internet_access, main = "Internet Access", xlab = "Study Hours", col = "skyblue", border = "black")
 hist(no_internet_access, main = "No Internet Access", xlab = "Study Hours", col = "skyblue", border = "black")
 
-# Check assumptions of ANOVA
+# Check assumptions of t-test
 shapiro.test(internet_access)
 shapiro.test(no_internet_access)
 ```
 
-Both the histograms and the Shapiro-Wilk test show that the distribution of study hours is approximately normal for all students. We will now use ANOVA to test for differences in study hours based on internet access.
+Both the histograms and the Shapiro-Wilk test show that the distribution of study hours is approximately normal for all students. We will now use t-test to test for differences in study hours based on internet access.
 
 ```{r}
-# ANOVA test for study hours by internet access
-anova_internet_access <- aov(Hours_Studied ~ Internet_Access, data = student_data)
-summary(anova_internet_access)
+# t-test test for study hours by internet access
+t.test(internet_access, no_internet_access)
 ```
 
-The ANOVA test shows that there is no significant difference in the average number of hours students study per week based on internet access, with a p-value greater than 0.05. This indicates that internet access does not have a significant impact on the number of hours students study per week.
+The p-value is less than 0.05, indicating that there is a significant difference in the average number of hours students study per week based on internet access. This suggests that internet access has a significant impact on the number of hours students study per week.
 
 ## Average Number of Hours Students Study per Week (Family Income Category)
 
@@ -550,14 +535,15 @@ shapiro.test(medium_family_income)
 shapiro.test(high_family_income)
 ```
 
-The Shapiro-Wilk test shows that the distribution of study hours is approximately normal for students with medium and high family income levels, with p-values greater than 0.05. However, the distribution for students with low family income is slightly skewed, with a p-value less than 0.05 indicating that the distribution is not normal. We will now use Kruksal-Wallis test to test for differences in study hours based on family income levels.
+Both the histograms and the Shapiro-Wilk test show that the distribution of study hours is approximately normal for all students. We will now use ANOVA to test for differences in study hours based on family income levels.
 
 ```{r}
-# Kruskal-Wallis test for study hours by family income
-kruskal.test(Hours_Studied ~ Family_Income, data = student_data)
+# ANOVA test for study hours by family income
+anova_family_income <- aov(Hours_Studied ~ Family_Income, data = student_data)
+summary(anova_family_income)
 ```
 
-The Kruskal-Wallis test shows that there is no significant difference in the average number of hours students study per week based on family income levels, with a p-value greater than 0.05. This indicates that family income does not have a significant impact on the number of hours students study per week.
+The ANOVA test shows that there is no significant difference in the average number of hours students study per week based on family income levels, with a p-value greater than 0.05. This indicates that family income does not have a significant impact on the number of hours students study per week.
 
 ## Average Number of Hours Students Study per Week (Teacher Quality Category)
 
@@ -610,7 +596,7 @@ summary(student_data$Hours_Studied[student_data$School_Type == "Public"])
 summary(student_data$Hours_Studied[student_data$School_Type == "Private"])
 ```
 
-The summary statistics of the average number of hours students study per week based on school type show no significant differences. We will now use ANOVA to test for differences in study hours based on school type. But first, we need to check the assumptions of ANOVA.
+The summary statistics of the average number of hours students study per week based on school type show no significant differences. We will now use t-test to test for differences in study hours based on school type. But first, we need to check the assumptions of t-test.
 
 ```{r}
 # Sample the data
@@ -622,20 +608,19 @@ par(mfrow = c(1, 2))
 hist(public_school, main = "Public School", xlab = "Study Hours", col = "skyblue", border = "black")
 hist(private_school, main = "Private School", xlab = "Study Hours", col = "skyblue", border = "black")
 
-# Check assumptions of ANOVA
+# Check assumptions of t-test
 shapiro.test(public_school)
 shapiro.test(private_school)
 ```
 
-Both histograms and the Shapiro-Wilk test show that the distribution of study hours is approximately normal for all students. We will now use ANOVA to test for differences in study hours based on school type.
+Both histograms and the Shapiro-Wilk test show that the distribution of study hours is approximately normal for all students. We will now use t-test to test for differences in study hours based on school type.
 
 ```{r}
-# ANOVA test for study hours by school type
-anova_school_type <- aov(Hours_Studied ~ School_Type, data = student_data)
-summary(anova_school_type)
+# t-test test for study hours by school type
+t.test(public_school, private_school)
 ```
 
-The ANOVA test shows that there is no significant difference in the average number of hours students study per week based on school type, with a p-value greater than 0.05. This indicates that school type does not have a significant impact on the number of hours students study per week.
+The t-test test shows that there is no significant difference in the average number of hours students study per week based on school type, with a p-value greater than 0.05. This indicates that school type does not have a significant impact on the number of hours students study per week.
 
 ## Average Number of Hours Students Study per Week (Peer Influence Category)
 
@@ -688,7 +673,7 @@ summary(student_data$Hours_Studied[student_data$Learning_Disabilities == "Yes"])
 summary(student_data$Hours_Studied[student_data$Learning_Disabilities == "No"])
 ```
 
-The summary statistics of the average number of hours students study per week based on learning disability show no significant differences. We will now use ANOVA to test for differences in study hours based on learning disability. But first, we need to check the assumptions of ANOVA.
+The summary statistics of the average number of hours students study per week based on learning disability show no significant differences. We will now use t-test to test for differences in study hours based on learning disability. But first, we need to check the assumptions of t-test.
 
 ```{r}
 # Sample the data
@@ -700,20 +685,19 @@ par(mfrow = c(1, 2))
 hist(learning_disabilities, main = "Learning Disabilities", xlab = "Study Hours", col = "skyblue", border = "black")
 hist(no_learning_disabilities, main = "No Learning Disabilities", xlab = "Study Hours", col = "skyblue", border = "black")
 
-# Check assumptions of ANOVA
+# Check assumptions of t-test
 shapiro.test(learning_disabilities)
 shapiro.test(no_learning_disabilities)
 ```
 
-All histograms and the Shapiro-Wilk test show that the distribution of study hours is approximately normal for all students. We will now use ANOVA to test for differences in study hours based on learning disability.
+The Shapiro-Wilk test shows that the distribution of study hours is approximately normal for students with learning disabilities, with a p-value greater than 0.05. However, the distribution for students without learning disabilities is slightly skewed, with a p-value less than 0.05. We will now use wilcoxon rank sum test to test for differences in study hours based on learning disability.
 
 ```{r}
-# ANOVA test for study hours by learning disability
-anova_learning_disabilities <- aov(Hours_Studied ~ Learning_Disabilities, data = student_data)
-summary(anova_learning_disabilities)
+# Wilcoxon rank sum test for study hours by learning disability
+wilcox.test(learning_disabilities, no_learning_disabilities)
 ```
 
-The ANOVA test shows that there is no significant difference in the average number of hours students study per week based on learning disability, with a p-value greater than 0.05. This indicates that learning disabilities do not have a significant impact on the number of hours students study per week.
+The tWilcoxon rank sum test shows that there is no significant difference in the average number of hours students study per week based on learning disability, with a p-value greater than 0.05. This indicates that learning disabilities do not have a significant impact on the number of hours students study per week.
 
 ## Average Number of Hours Students Study per Week (Parental Education Level Category)
 
@@ -836,7 +820,7 @@ The ANOVA test shows that there is no significant difference in the average numb
 
 ## Summary of Average Number of Hours Students Study per Week
 
-In summary, the average number of hours students study per week is approximately 19.98 hours. There are no significant differences in the average number of hours students study per week based on various factors such as parental involvement, access to resources, extracurricular activities, motivation levels, internet access, family income, teacher quality, school type, peer influence, learning disabilities, parental education levels, distance from home to school, and Gender. This indicates that the number of hours students study per week is consistent across different factors.
+In summary, we have explored the average number of hours students study per week based on various factors such as access to resources, extracurricular activities, motivation levels, internet access, family income, teacher quality, school type, peer influence, learning disabilities, parental education levels, distance from home to school, and gender. From our analysis we found that only internet access had a significant impact on the number of hours students study per week. The other factors did not show significant differences in study hours. This suggests that internet access plays a crucial role in determining the number of hours students study per week.
 
 # The variation in attendance rates across students
 
